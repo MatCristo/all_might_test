@@ -31,11 +31,13 @@ services:
       - test-network
     ports:
       - 4566:4566
+    # Healthy only once the init scripts have finished (the secret, the log
+    # group and the seeded metric), not merely once LocalStack answers.
     healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:4566/_localstack/health"]
+      test: ["CMD-SHELL", "curl -sf http://localhost:4566/_localstack/init/ready | grep -q '\"completed\": true'"]
       interval: 5s
       timeout: 5s
-      retries: 5
+      retries: 30
   
   all_might:
     container_name: all_might

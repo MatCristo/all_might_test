@@ -34,7 +34,7 @@ Go REST API on Echo, organized by domain under `internal/`.
 
 **Seed users**: `davi@` and `test2@telelaudo.com.br` (password `davi1234`), `teste.admin@` and `teste.support@telelaudo.com.br` (password `teste1234`), all holding every page.
 
-**Simulated metric**: `test/localstack/application_metrics.py` (mounted into LocalStack, started by `config_localstack.py`) seeds 8 days of `ExecucaoNoPrazo` and keeps publishing every 5 minutes, one scenario per application. LocalStack's `GetMetricData` is slow (~5 s per application for 7 days of 5-minute periods), hence the cache.
+**Simulated metric**: `test/localstack/application_metrics.py` (mounted into LocalStack, run by `config_localstack.py`: `seed` synchronously, then `publish` in the background; the compose healthcheck waits on `/_localstack/init/ready`, so LocalStack is healthy only once the history is seeded) seeds 8 days of `ExecucaoNoPrazo` and keeps publishing every 5 minutes, one scenario per application. LocalStack's `GetMetricData` is slow (~5 s per application for 7 days of 5-minute periods), hence the cache.
 
 ## Frontend
 

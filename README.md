@@ -26,8 +26,11 @@ docker compose up -d          # Postgres (test_db), LocalStack e o container all
 
 `test/database/create_database.sql` e `test/localstack/config_localstack.py`
 só rodam na criação dos containers (o segundo também inicia o simulador de
-métricas, `test/localstack/application_metrics.py`). Depois de alterar um deles:
-`docker compose down && docker compose up -d`.
+métricas, `test/localstack/application_metrics.py`). O LocalStack só fica
+*healthy* depois que esses scripts terminam, incluindo os 8 dias de histórico
+da métrica (~1 min), então o `docker compose up -d` demora um pouco mais. Em
+troca, a API e os testes nunca leem a métrica pela metade. Depois de alterar
+um deles: `docker compose down && docker compose up -d`.
 
 **Backend** (dentro do container, porta 1323):
 
@@ -105,7 +108,9 @@ como no dashboard original.
 métrica) e a rota responde da memória. Ler o CloudWatch a cada acesso só
 repetiria a mesma resposta e o `GetMetricData` é cobrado por métrica lida. No
 LocalStack, ler 7 dias de 10 aplicações leva ~50 s, então logo depois de subir
-a API o primeiro acesso espera esse tempo; os seguintes são instantâneos.
+a API o primeiro acesso espera esse tempo; os seguintes são instantâneos. Se a
+leitura falha e ainda não há relatório, a rota responde 503, e quem estava
+esperando recebe o mesmo erro na hora, sem repetir a consulta.
 
 **Dados simulados** — `test/localstack/application_metrics.py` semeia 8 dias
 de histórico e depois continua publicando a cada 5 minutos, como as aplicações

@@ -1,4 +1,5 @@
 import subprocess
+from datetime import datetime, timezone
 
 import boto3
 
@@ -49,8 +50,15 @@ except logs_client.exceptions.ResourceAlreadyExistsException:
     print(f"Log Stream '{log_stream_name}' already exists.")
 
 
-# The "Status das aplicações" metric: seeds 8 days and keeps publishing every 5
-# minutes, like the real applications. It runs in the background because it
-# never ends; its output shows up in `docker logs localhost.localstack.cloud`.
-subprocess.Popen(["python3", "/etc/localstack/application_metrics.py"], start_new_session=True)
-print("Application metrics simulation started.")
+# The "Status das aplicações" metric, like the real applications publish it.
+# The 8 days of history are seeded first, and this script waits for them: until
+# it ends LocalStack is not reported ready (the compose healthcheck reads
+# /_localstack/init/ready), so the API never reads a half-seeded metric. Then
+# the publisher runs in the background, because it never ends; its output shows
+# up in `docker logs localhost.localstack.cloud`.
+metrics_script = "/etc/localstack/application_metrics.py"
+metrics_started_at = datetime.now(timezone.utc).isoformat()
+
+subprocess.run(["python3", metrics_script, "seed", metrics_started_at], check=True)
+subprocess.Popen(["python3", metrics_script, "publish", metrics_started_at], start_new_session=True)
+print("Application metrics seeded; publishing every 5 minutes.")

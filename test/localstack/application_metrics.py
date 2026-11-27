@@ -12,9 +12,15 @@ not. LocalStack starts empty, so this script plays the applications' part:
 Each application follows one scenario — failing now, recovered, no data now,
 an old gap, flapping or healthy — so the page has every situation to show.
 
-config_localstack.py starts it in the background when LocalStack is ready.
+Usage: application_metrics.py [seed | publish | all] [started_at, ISO 8601]
+
+config_localstack.py runs it twice when LocalStack is ready, with the same
+started_at: "seed" and waits for it, so LocalStack only reports ready once the
+history is all there; then "publish" in the background, because it never ends.
+With no arguments it does both, from now.
 """
 
+import sys
 import time
 from datetime import datetime, timedelta, timezone
 
@@ -141,13 +147,24 @@ def publish_forever(started_at):
 
 
 def main():
-    # Aligned to a 5-minute boundary, like the real metric's periods.
-    started_at = datetime.now(timezone.utc).replace(second=0, microsecond=0)
+    mode = sys.argv[1] if len(sys.argv) > 1 else "all"
+    started_at = datetime.fromisoformat(sys.argv[2]) if len(sys.argv) > 2 else datetime.now(timezone.utc)
+
+    if mode not in ("seed", "publish", "all"):
+        sys.exit(f"Unknown mode '{mode}': use seed, publish or all.")
+
+    # Aligned to a 5-minute boundary, like the real metric's periods. Both runs
+    # get the same started_at, so the publisher carries on right where the
+    # seeded history ends.
+    started_at = started_at.astimezone(timezone.utc).replace(second=0, microsecond=0)
     started_at -= timedelta(minutes=started_at.minute % PERIOD_MINUTES)
 
-    seed_history(started_at)
-    print(f"Metric {METRIC_NAME}: publishing every {PERIOD_MINUTES} minutes from now on.", flush=True)
-    publish_forever(started_at)
+    if mode in ("seed", "all"):
+        seed_history(started_at)
+
+    if mode in ("publish", "all"):
+        print(f"Metric {METRIC_NAME}: publishing every {PERIOD_MINUTES} minutes from now on.", flush=True)
+        publish_forever(started_at)
 
 
 if __name__ == "__main__":
