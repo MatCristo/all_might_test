@@ -108,12 +108,19 @@
 /* The time axis sits over the timelines' column only: the row's left border
    and padding, the badge and info columns and their two gaps. */
 .axis {
-    display: grid;
-    grid-template-columns: 1fr auto;
+    position: relative;
+    height: 1.1rem;
     margin-left: calc(4px + 1rem + 6.5rem + 19rem + 2rem);
     margin-right: calc(1px + 1rem);
     color: var(--muted);
     font-size: var(--fs-xs);
+}
+
+/* Centred on the day it names. */
+.axisDay {
+    position: absolute;
+    transform: translateX(-50%);
+    white-space: nowrap;
 }
 
 .row {
@@ -175,12 +182,107 @@
 }
 
 /* ---------- the 7-day timeline ---------- */
+.timelineWrap {
+    position: relative;
+}
+
 .timeline {
     position: relative;
-    height: 1.25rem;
+    height: 1.5rem;
     border-radius: var(--r-xs);
     background-color: var(--surface-3);
     overflow: hidden;
+    cursor: crosshair;
+    /* Pointer moves over the bar on a touch screen should read the time, not
+       scroll the page sideways. */
+    touch-action: pan-y;
+}
+
+/* Midnight in São Paulo. */
+.dayLine {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    width: 1px;
+    background-color: var(--surface);
+    opacity: 0.7;
+    pointer-events: none;
+}
+
+/* Follows the pointer. */
+.cursor {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    width: 2px;
+    margin-left: -1px;
+    background-color: var(--ink);
+    pointer-events: none;
+}
+
+.tooltip {
+    position: absolute;
+    bottom: calc(100% + 6px);
+    z-index: var(--z-tooltip);
+    display: flex;
+    flex-direction: column;
+    gap: 0.125rem;
+    min-width: 11rem;
+    padding: 0.5rem 0.625rem;
+    border: 1px solid var(--border-strong);
+    border-radius: var(--r-sm);
+    background-color: var(--surface);
+    box-shadow: var(--shadow-lg);
+    color: var(--ink);
+    font-size: var(--fs-sm);
+    white-space: nowrap;
+    pointer-events: none;
+}
+
+.tooltipDetail {
+    color: var(--muted);
+    font-size: var(--fs-xs);
+}
+
+.tooltip_ok { color: var(--ok); font-weight: 650; }
+.tooltip_failing { color: var(--danger); font-weight: 650; }
+.tooltip_no_data { color: var(--warn); font-weight: 650; }
+
+/* ---------- past problems, in words ---------- */
+.incidents {
+    grid-column: 2 / -1;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: 0.25rem 0.75rem;
+    padding-top: 0.5rem;
+    border-top: 1px dashed var(--border);
+    font-size: var(--fs-xs);
+    color: var(--text);
+}
+
+.incidentsTitle {
+    color: var(--muted);
+    font-weight: 600;
+}
+
+.incidentList {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.25rem 1rem;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+.linkButton {
+    padding: 0;
+    border: none;
+    background: none;
+    color: var(--accent);
+    font-size: inherit;
+    text-decoration: underline;
+    cursor: pointer;
 }
 
 .segment {
@@ -240,5 +342,9 @@
 
     .axis {
         margin-inline: 0;
+    }
+
+    .incidents {
+        grid-column: 1;
     }
 }

@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { formatDuration, formatMoment, formatTime } from './format';
+import { formatDuration, formatMoment, formatRange, formatTime, midnightsBetween } from './format';
 
 const MINUTE = 60 * 1000;
 const HOUR = 60 * MINUTE;
@@ -30,5 +30,36 @@ describe('formatMoment / formatTime', () => {
     it('shows UTC in São Paulo time', () => {
         expect(formatMoment('2026-11-27T15:00:00Z')).toBe('27/11, 12:00');
         expect(formatTime('2026-11-27T15:00:00Z')).toBe('12:00');
+    });
+});
+
+describe('formatRange', () => {
+    it('writes the date once when the stretch fits in one day', () => {
+        expect(formatRange('2026-11-25T06:00:00Z', '2026-11-25T18:00:00Z')).toBe('25/11, 03:00 – 15:00');
+    });
+
+    it('writes both dates when it crosses midnight', () => {
+        expect(formatRange('2026-11-25T23:00:00Z', '2026-11-26T05:00:00Z')).toBe('25/11, 20:00 – 26/11, 02:00');
+    });
+});
+
+describe('midnightsBetween', () => {
+    // São Paulo is UTC-3: its midnight is 03:00 UTC.
+    it('lists every São Paulo midnight inside the window', () => {
+        const midnights = midnightsBetween('2026-11-20T18:25:00Z', '2026-11-27T18:25:00Z');
+
+        expect(midnights.map(ms => new Date(ms).toISOString())).toEqual([
+            '2026-11-21T03:00:00.000Z',
+            '2026-11-22T03:00:00.000Z',
+            '2026-11-23T03:00:00.000Z',
+            '2026-11-24T03:00:00.000Z',
+            '2026-11-25T03:00:00.000Z',
+            '2026-11-26T03:00:00.000Z',
+            '2026-11-27T03:00:00.000Z',
+        ]);
+    });
+
+    it('leaves out a midnight that is exactly an end of the window', () => {
+        expect(midnightsBetween('2026-11-21T03:00:00Z', '2026-11-22T03:00:00Z')).toEqual([]);
     });
 });
