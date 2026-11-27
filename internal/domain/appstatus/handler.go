@@ -14,9 +14,11 @@ import (
 func GetApplicationsStatus(c echo.Context) error {
 	report, err := currentReport()
 
+	// Only reached while there is no report at all (a cached one is always
+	// served): the metric is unavailable for now, so 503 and try again later.
 	if err != nil {
 		go aws.RegisterLog("GetApplicationsStatus", err.Error())
-		return c.JSON(http.StatusInternalServerError, models.MessageDTO{Message: "Could not read the applications' metric"})
+		return c.JSON(http.StatusServiceUnavailable, models.MessageDTO{Message: "Could not read the applications' metric"})
 	}
 
 	return c.JSON(http.StatusOK, report)

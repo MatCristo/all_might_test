@@ -139,7 +139,7 @@ describe('Status das aplicações', () => {
     });
 
     it('offers to try again when the report cannot be read', async () => {
-        fetchStatus.mockResolvedValue(fail(500, { message: 'boom' }) as never);
+        fetchStatus.mockResolvedValue(fail(503, { message: 'boom' }) as never);
 
         const { showToast } = open();
         await ready();
