@@ -11,6 +11,7 @@ export type PanelPage = {
 
 export const PANEL_PAGES: PanelPage[] = [
     { path: '/', label: 'Integração', permission: 'page:integracao' },
+    { path: '/status', label: 'Status das aplicações', permission: 'page:status' },
 ];
 
 /* Where someone lands after signing in: the first page they actually hold, in

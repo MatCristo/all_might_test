@@ -7,6 +7,10 @@ describe('landingPathFor', () => {
         expect(landingPathFor(['page:integracao'])).toBe('/');
     });
 
+    it('sends whoever holds only Status das aplicações to "/status"', () => {
+        expect(landingPathFor(['page:status'])).toBe('/status');
+    });
+
     it('falls back to "/" when there is nothing to land on', () => {
         // The guard on "/" explains the situation; a blank screen would not.
         expect(landingPathFor([])).toBe('/');
