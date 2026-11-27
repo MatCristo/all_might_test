@@ -49,7 +49,7 @@ except logs_client.exceptions.ResourceAlreadyExistsException:
     print(f"Log Stream '{log_stream_name}' already exists.")
 
 
-# The "Status das aplicações" metric: seeds 7 days and keeps publishing every 5
+# The "Status das aplicações" metric: seeds 8 days and keeps publishing every 5
 # minutes, like the real applications. It runs in the background because it
 # never ends; its output shows up in `docker logs localhost.localstack.cloud`.
 subprocess.Popen(["python3", "/etc/localstack/application_metrics.py"], start_new_session=True)
