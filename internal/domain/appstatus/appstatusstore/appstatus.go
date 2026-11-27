@@ -8,7 +8,7 @@ import (
 )
 
 // The metric every background application publishes every 5 minutes (see
-// test/localstack/config_localstack.py for the simulated one).
+// test/localstack/application_metrics.py for the simulated one).
 const (
 	namespace  = "monitor_de_aplicacoes"
 	metricName = "ExecucaoNoPrazo"
