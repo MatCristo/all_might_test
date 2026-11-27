@@ -1,0 +1,7 @@
+frontend/all_might/dist
+frontend/all_might/node_modules
+volume/
+.venv/
+.claude/
+.impeccable/
+test/localstack/__pycache__

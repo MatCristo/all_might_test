@@ -1,0 +1,29 @@
+/* The loading vocabulary for the whole app: one ring, two tones. */
+.spinner {
+    display: inline-block;
+    box-sizing: border-box;
+    border-style: solid;
+    border-color: var(--border-strong);
+    border-top-color: var(--text);
+    border-radius: 50%;
+    animation: spin 0.8s linear infinite;
+    flex: none;
+}
+
+/* For a spinner sitting on a filled button or any other coloured surface, where
+   the ink-coloured ring would disappear. */
+.onAccent {
+    border-color: color-mix(in srgb, var(--on-accent) 35%, transparent);
+    border-top-color: var(--on-accent);
+}
+
+@keyframes spin {
+    to { transform: rotate(360deg); }
+}
+
+/* Rotation still reads as "working", just slow enough not to pull the eye. */
+@media (prefers-reduced-motion: reduce) {
+    .spinner {
+        animation-duration: 2.4s;
+    }
+}

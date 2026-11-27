@@ -1,0 +1,46 @@
+.page {
+    width: 100vw;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: row;
+    background-color: var(--surface);
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.center {
+    flex: 1 1 auto;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 2rem;
+}
+
+.card {
+    max-width: 32rem;
+    text-align: center;
+    border: 1px solid var(--border);
+    border-radius: var(--r-lg);
+    background: var(--surface);
+    padding: 2rem 2.25rem;
+    box-shadow: var(--shadow-sm);
+}
+
+.title {
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: var(--ink);
+    margin: 0 0 0.6rem;
+}
+
+.text {
+    margin: 0;
+    color: var(--muted);
+    font-size: var(--fs-sm);
+    line-height: 1.55;
+}
+
+.text strong {
+    font-family: var(--font-mono);
+    font-size: var(--fs-xs);
+    color: var(--text);
+}

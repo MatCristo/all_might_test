@@ -1,0 +1,202 @@
+/* =============================================================================
+   Telelaudo panel — design tokens
+   =============================================================================
+   One vocabulary for both themes. Every value below is defined once here and
+   consumed by name everywhere else; no page or component redeclares a colour.
+
+   Theming works by *redefining these tokens*, never by rewriting rules. A
+   component styles itself once against `var(--surface)` / `var(--text)` and is
+   correct in both themes for free. That is why `body.dark` appears in exactly
+   one place in this codebase (below) instead of 260 times across 23 files.
+
+   Contrast: every foreground/background pair a user can actually read has been
+   verified at WCAG AA (>=4.5:1 for body text, >=3:1 for UI edges) in BOTH
+   themes. `--accent` is deliberately a value that passes 4.5:1 in both
+   directions — as coloured text on a light surface, and as a fill under white
+   text — so one token covers links, buttons and active states without a second
+   "accent for text" variant that drifts out of sync.
+   ============================================================================= */
+
+:root {
+    /* ---------- brand ----------
+       Sourced from the real Telelaudo assets: the favicon reads #33B2EA /
+       #0A89CE and the login background runs #01394A -> #0C6AA2 -> #489DD3.
+       The panel used to accent in indigo (#4338ca / #4f46e5) and generic blue
+       (#3b82f6 / #4a6bff / #007bff), none of which appear in the brand. */
+    --brand-azure: #0a89ce;
+    --brand-azure-deep: #01394a;
+
+    /* ---------- surfaces ----------
+       1 = page, 2 = raised/zebra/chip, 3 = header row, track, group band. */
+    --surface: #ffffff;
+    --surface-2: #f5f7fa;
+    --surface-3: #eaeef3;
+    --hover: #f2f5f8;
+
+    /* ---------- lines ---------- */
+    --border: #e2e6ec;
+    --border-strong: #cfd5de;
+
+    /* ---------- text ----------
+       ink = headings, text = body, muted = secondary. All three are tinted a
+       few points toward the brand hue rather than pure neutral grey. */
+    --ink: #101623;
+    --text: #39424f;
+    --muted: #616b7a;
+    --on-accent: #ffffff;
+
+    /* ---------- accent ---------- */
+    --accent: #0a6ea8;
+    --accent-bright: #0a89ce;
+    --accent-soft: #e6f1f8;
+    --accent-ring: rgba(10, 110, 168, 0.28);
+
+    /* ---------- navigation rail ----------
+       The 150px sidebar is the one large field of brand colour in the panel,
+       and the only place the Telelaudo identity is visible while working. */
+    --nav: #0a5f92;
+    --nav-ink: #ffffff;
+    /* Inactive labels sit at 78% white — verified 4.85:1 on the rail. On hover
+       and when current, ink goes to full white; dim ink over the hover fill
+       drops to 3.89:1, so the two always move together. */
+    --nav-ink-dim: rgba(255, 255, 255, 0.78);
+    --nav-hover-bg: rgba(255, 255, 255, 0.10);
+    --nav-active-bg: rgba(255, 255, 255, 0.17);
+    --nav-line: rgba(255, 255, 255, 0.16);
+    /* The floating open-button sits over page content rather than over the
+       rail, so its hover has to be opaque — a translucent white would mix with
+       whatever page is behind it. */
+    --nav-hover-solid: #0a6ea8;
+    --nav-w: 184px;
+
+    /* ---------- status ----------
+       `liberado` / `bloqueado` in the rule matrices, plus form validation. */
+    --ok: #157347;
+    --ok-soft: rgba(21, 115, 71, 0.12);
+    --danger: #b02a37;
+    --danger-soft: rgba(176, 42, 55, 0.12);
+    --warn: #9a5b06;
+    --warn-soft: rgba(154, 91, 6, 0.14);
+
+    /* ---------- elevation ----------
+       Every shadow carries an offset and a soft blur; no zero-offset haloes. */
+    --backdrop: rgba(16, 22, 35, 0.55);
+    --shadow-sm: 0 1px 2px rgba(16, 22, 35, 0.08), 0 0 0 1px rgba(16, 22, 35, 0.04);
+    --shadow-md: 0 2px 8px rgba(16, 22, 35, 0.10);
+    --shadow-lg: 0 6px 20px rgba(16, 22, 35, 0.14);
+
+    /* ---------- radius ---------- */
+    --r-xs: 4px;
+    --r-sm: 6px;
+    --r-md: 8px;
+    --r-lg: 12px;
+    --r-xl: 16px;
+    --r-pill: 999px;
+
+    /* ---------- type ----------
+       A dense operations panel: the base step is 0.875rem, not 1rem. */
+    --font-sans: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    --font-mono: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, monospace;
+    --fs-xs: 0.75rem;
+    --fs-sm: 0.8125rem;
+    --fs-base: 0.875rem;
+    --fs-md: 0.9375rem;
+    --fs-lg: 1.0625rem;
+    --fs-xl: 1.25rem;
+    --fs-title: clamp(1.4rem, 1rem + 1.4vw, 1.9rem);
+
+    /* ---------- motion ----------
+       Exponential ease-out. `--dur-1` is for colour/opacity feedback on
+       controls, `--dur-2` for anything that moves or resizes. */
+    --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
+    --dur-1: 140ms;
+    --dur-2: 260ms;
+
+    /* ---------- z-index ----------
+       Semantic scale. Nothing in this codebase may use a raw z-index again. */
+    --z-base: 1;
+    --z-sticky: 100;
+    --z-sidebar: 1000;
+    --z-sidebar-toggle: 1001;
+    --z-modal-backdrop: 1050;
+    --z-modal: 1055;
+    --z-toast: 1090;
+    --z-tooltip: 1100;
+}
+
+/* =============================================================================
+   Dark theme — the one place the app redefines colour.
+   Surfaces keep the established #2b2d3e / #343648 the team already reads all
+   shift; only the accent moves onto the brand hue.
+   ============================================================================= */
+body.dark {
+    --surface: #2b2d3e;
+    --surface-2: #343648;
+    --surface-3: #3d3f52;
+    --hover: #383b4e;
+
+    /* Kept close to the surfaces on purpose: a dark-mode border more than a
+       step or two lighter than what it sits on stops reading as an edge and
+       starts reading as a lit outline. #545872 also drifted purple, away from
+       the blue-grey the surfaces use, which is what made it look off. */
+    --border: #3c3f50;
+    --border-strong: #4b4e62;
+
+    --ink: #eceef6;
+    --text: #cbd0dc;
+    --muted: #a8afc0;
+    --on-accent: #08131d;
+
+    --accent: #4fb6ee;
+    --accent-bright: #7cc9f3;
+    --accent-soft: rgba(79, 182, 238, 0.14);
+    --accent-ring: rgba(79, 182, 238, 0.34);
+
+    --nav: #23252f;
+    --nav-ink: #ffffff;
+    --nav-ink-dim: rgba(255, 255, 255, 0.72);
+    --nav-hover-bg: rgba(255, 255, 255, 0.06);
+    --nav-active-bg: rgba(255, 255, 255, 0.12);
+    --nav-line: rgba(255, 255, 255, 0.10);
+    --nav-hover-solid: #2e3048;
+
+    --ok: #7fd18f;
+    --ok-soft: rgba(46, 125, 50, 0.26);
+    --danger: #f19a9a;
+    --danger-soft: rgba(198, 40, 40, 0.28);
+    --warn: #e8b465;
+    --warn-soft: rgba(154, 91, 6, 0.30);
+
+    --backdrop: rgba(0, 0, 0, 0.65);
+    --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.35);
+    --shadow-md: 0 2px 8px rgba(0, 0, 0, 0.30);
+    --shadow-lg: 0 6px 20px rgba(0, 0, 0, 0.42);
+
+    color-scheme: dark;
+}
+
+/* Print: force the light vocabulary so a dark-mode user does not print a black page. */
+@media print {
+    body,
+    body.dark {
+        --surface: #ffffff;
+        --surface-2: #f0f1f3;
+        --surface-3: #e7e9f0;
+        --hover: #ffffff;
+        --border: #c4c8d0;
+        --border-strong: #9aa0ab;
+        --ink: #0f1216;
+        --text: #1f242c;
+        --muted: #464c56;
+        --on-accent: #ffffff;
+        --accent: #0a5580;
+        --accent-soft: #e5eff5;
+        --ok: #0f5c38;
+        --ok-soft: #e5f1ea;
+        --danger: #8f1f2a;
+        --danger-soft: #f7e6e8;
+        --shadow-sm: none;
+        --shadow-md: none;
+        --shadow-lg: none;
+    }
+}

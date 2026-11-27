@@ -1,0 +1,183 @@
+.appContainer {
+  min-height: 100vh;
+  background-color: var(--surface);
+  display: flex;
+  flex-direction: row;
+  font-family: var(--font-sans);
+}
+
+.contentContainer {
+  flex: 1;
+  /* Without this a flex item refuses to shrink below its content's intrinsic
+     width, so the table pushed the whole page wider than the viewport. */
+  min-width: 0;
+  max-width: 1400px;
+  margin-inline: auto;
+  padding: 20px 1.5rem 40px;
+}
+
+/* The bare `h1 { }` that used to live here was not scoped by CSS Modules —
+   only class names are — so it restyled every heading in the app. The page
+   title now uses .pageTitle instead. */
+
+.statusTag {
+  padding: 4px 8px;
+  /* It is rendered as a <button>, so the UA's default button border and
+     background have to be cleared or every tag gets an outset frame. */
+  border: none;
+  border-radius: 4px;
+  font-family: inherit;
+  font-size: 12px;
+  font-weight: 500;
+  line-height: 1.2;
+  display: inline-block;
+}
+
+.statusSuccess {
+  background-color: var(--ok-soft);
+  color: var(--ok);
+}
+
+.statusWarning {
+  background-color: var(--warn-soft);
+  color: var(--warn);
+}
+
+.statusError {
+  background-color: var(--danger-soft);
+  color: var(--danger);
+}
+
+.statusInfo {
+  background-color: var(--accent-soft);
+  color: var(--accent);
+}
+
+.clickable {
+  cursor: pointer;
+}
+
+.clickable:hover {
+  opacity: 0.8;
+}
+
+.responseContent {
+  /* A raw HTTP response body: monospace because it is data, not decoration.
+     Long single-token payloads have to wrap or the modal scrolls sideways. */
+  margin: 0;
+  padding: 0.75rem;
+  border-radius: var(--r-sm);
+  background-color: var(--surface-2);
+  color: var(--text);
+  font-family: var(--font-mono);
+  font-size: var(--fs-sm);
+  white-space: pre-wrap;
+  word-break: break-word;
+  overflow-wrap: anywhere;
+  max-height: 60vh;
+  overflow-y: auto;
+}
+
+.resendButton {
+  padding: 5px 10px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 0.9rem;
+  transition: all 0.2s;
+}
+
+.resendButtonIdle {
+  background-color: var(--ok);
+  color: var(--on-accent);
+}
+
+.resendButtonLoading {
+  background-color: var(--warn);
+  color: black;
+}
+
+.resendButtonSuccess {
+  background-color: var(--ok);
+  color: var(--on-accent);
+  animation: pulse 1s;
+}
+
+.resendButtonError {
+  background-color: var(--danger);
+  color: var(--on-accent);
+}
+
+.resendButton:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+}
+
+@keyframes pulse {
+  0% { transform: scale(1); }
+
+  50% { transform: scale(1.05); }
+
+  100% { transform: scale(1); }
+
+}
+
+.successIcon {
+  color: green;
+  font-size: 1.2em;
+  margin-right: 8px;
+}
+
+.errorIcon {
+  color: red;
+  font-size: 1.2em;
+  margin-right: 8px;
+}
+
+.loadingCell {
+  text-align: center;
+  padding: 2rem;
+}
+
+.noDataCell {
+  text-align: center;
+  padding: 1rem;
+  color: var(--muted);
+}
+
+/* ---------- page chrome ---------- */
+.pageTitle {
+    font-size: var(--fs-xl);
+    font-weight: 650;
+    letter-spacing: -0.01em;
+    color: var(--ink);
+    margin: 0 0 1rem;
+}
+
+.filterRow {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.75rem;
+    margin-bottom: 1rem;
+}
+
+/* Takes the leftover width; below ~18rem the controls wrap onto new lines. */
+.searchField {
+    flex: 1 1 18rem;
+    min-width: 0;
+}
+
+/* InputGroupDropdown renders a full-width InputGroup, so it needs a box of its
+   own to sit at a fixed size in the filter row. */
+.companyField {
+    flex: 0 0 auto;
+    width: 22rem;
+    max-width: 100%;
+}
+
+.modalTitle {
+    font-size: var(--fs-lg);
+    font-weight: 650;
+    color: var(--ink);
+}

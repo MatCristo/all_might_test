@@ -1,0 +1,160 @@
+/* =============================================================================
+   Navigation rail
+   =============================================================================
+   Item colours live in the component's `menuItemStyles`, not here:
+   react-pro-sidebar injects its own defaults with emotion at runtime, at the
+   same specificity as a module rule, so a stylesheet loses that order fight.
+   This file owns the rail's structure — header, footer, and the two controls.
+   ============================================================================= */
+
+.wrapper {
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 100vh;
+    z-index: var(--z-sidebar);
+    overflow: hidden;
+    transition: width var(--dur-2) var(--ease-out);
+}
+
+/* Layout spacer: the rail itself is fixed, so this holds the content over. */
+.spacer {
+    flex-shrink: 0;
+    transition: width var(--dur-2) var(--ease-out);
+}
+
+/* ---------- header ---------- */
+.brand {
+    display: flex;
+    align-items: center;
+    gap: 0.625rem;
+    height: 60px;
+    padding: 0 0.75rem;
+    border-bottom: 1px solid var(--nav-line);
+    color: var(--nav-ink);
+}
+
+.brandText {
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+    line-height: 1.15;
+}
+
+.brandName {
+    font-size: var(--fs-md);
+    font-weight: 650;
+    letter-spacing: -0.01em;
+    white-space: nowrap;
+}
+
+.brandSub {
+    font-size: var(--fs-xs);
+    color: var(--nav-ink-dim);
+    white-space: nowrap;
+}
+
+/* ---------- controls ---------- */
+.toggle,
+.floatingToggle {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex: none;
+    width: 34px;
+    height: 34px;
+    border: none;
+    border-radius: var(--r-sm);
+    color: var(--nav-ink);
+    cursor: pointer;
+    transition: background-color var(--dur-1) var(--ease-out);
+}
+
+.toggle {
+    margin-left: auto;
+    background-color: transparent;
+}
+
+.toggle:hover {
+    background-color: var(--nav-hover-bg);
+}
+
+/* Shown only while the rail is closed — the sole way back to the menu, so it
+   carries the rail's own colour to read as part of the navigation. */
+.floatingToggle {
+    position: fixed;
+    top: 13px;
+    left: 12px;
+    z-index: var(--z-sidebar-toggle);
+    background-color: var(--nav);
+    box-shadow: var(--shadow-md);
+}
+
+.floatingToggle:hover {
+    background-color: var(--nav-hover-solid);
+}
+
+.toggle:focus-visible,
+.floatingToggle:focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 2px;
+}
+
+/* ---------- footer ---------- */
+.footer {
+    margin-top: auto;
+    padding: 0.5rem;
+    border-top: 1px solid var(--nav-line);
+}
+
+/* These are controls, not destinations, so they carry their own quieter
+   vocabulary rather than reusing the navigation items above. */
+.footerButton {
+    display: block;
+    width: 100%;
+    padding: 0.5rem 0.75rem;
+    border: none;
+    border-radius: var(--r-sm);
+    background-color: transparent;
+    color: var(--nav-ink-dim);
+    font-size: var(--fs-sm);
+    font-weight: 500;
+    text-align: left;
+    cursor: pointer;
+    transition: background-color var(--dur-1) var(--ease-out),
+                color var(--dur-1) var(--ease-out);
+}
+
+.footerButton + .footerButton {
+    margin-top: 2px;
+}
+
+.footerButton:hover {
+    background-color: var(--nav-hover-bg);
+    color: var(--nav-ink);
+}
+
+.footerButton:focus-visible {
+    outline: 2px solid var(--nav-ink);
+    outline-offset: -2px;
+}
+
+/* No danger colour on "Sair": red over a blue rail composites to a murky
+   blue-grey that reads as nothing, and salmon text misses AA at 3.23:1.
+   Logging out is recoverable anyway — its position last in the list is the
+   signal it needs. */
+
+/* =============================================================================
+   react-pro-sidebar internals
+   ============================================================================= */
+.wrapper :global(.ps-sidebar-container) {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    background-color: var(--nav);
+    transition: background-color var(--dur-2) var(--ease-out);
+}
+
+.wrapper :global(.ps-menu-root) {
+    padding: 0.5rem;
+}

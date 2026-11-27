@@ -1,0 +1,38 @@
+/* The trigger renders as a Bootstrap `.btn`, which sets `text-align: center`
+   and its own background at the same specificity as a single class. Doubling
+   the class selector wins on specificity instead of reaching for `!important`,
+   so these rules stay overridable by anything more specific downstream. */
+.dropdownContainer.dropdownContainer {
+    /* The chosen value — and the "Selecionar" prompt standing in for it — is
+       field content, so it starts at the left edge like the text in every other
+       input on the row. Centring made the value drift away from its label. */
+    text-align: left;
+    background-color: var(--surface);
+    color: var(--text);
+    border: 1px solid var(--border-strong);
+    /* Keep the field at its column width: truncate long values with an ellipsis
+       instead of letting the button grow. min-width: 0 lets the flex item shrink
+       below its content size. */
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+/* It renders as a Bootstrap button, but it reads as a form field, so hovering
+   must not repaint it like a button. Bootstrap's `.btn-light` hover forces
+   #d3d4d5 regardless of theme, which in dark mode put near-white behind
+   near-white text at 1.04:1. */
+.dropdownContainer.dropdownContainer:hover {
+    background-color: var(--hover);
+    border-color: var(--border-strong);
+}
+
+.dropdownItemsContainer {
+    max-height: 165px;
+    overflow-y: auto;
+}
+
+/* No dark-mode block for the menu on purpose: `.dropdown-menu`, `.dropdown-item`,
+   the divider and the search field inside the menu are all Bootstrap surfaces,
+   and the bootstrap bridge already points them at the tokens. */

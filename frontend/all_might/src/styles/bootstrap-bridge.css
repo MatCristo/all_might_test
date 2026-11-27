@@ -1,0 +1,339 @@
+/* =============================================================================
+   Bootstrap bridge
+   =============================================================================
+   Bootstrap 5 stays (react-bootstrap Modal, Toast, Form, Button are used
+   throughout). Rather than fight it or shadow it, we point its own custom
+   properties at our tokens. One consequence worth knowing: a react-bootstrap
+   component dropped into any page is themed correctly in both themes without
+   that page writing a single dark-mode rule.
+
+   Loaded after `bootstrap.min.css`, so these win.
+   ============================================================================= */
+
+:root,
+body.dark {
+    /* surfaces & text */
+    --bs-body-bg: var(--surface);
+    --bs-body-color: var(--text);
+    --bs-emphasis-color: var(--ink);
+    --bs-secondary-color: var(--muted);
+    --bs-secondary-bg: var(--surface-2);
+    --bs-tertiary-bg: var(--surface-2);
+    --bs-border-color: var(--border);
+    --bs-border-color-translucent: var(--border);
+
+    /* brand */
+    --bs-primary: var(--accent);
+    --bs-primary-rgb: 10, 110, 168;
+    --bs-link-color: var(--accent);
+    --bs-link-hover-color: var(--accent-bright);
+    --bs-focus-ring-color: var(--accent-ring);
+
+    /* status — keeps Alert/Badge/is-invalid on our palette */
+    --bs-success: var(--ok);
+    --bs-danger: var(--danger);
+    --bs-warning: var(--warn);
+    --bs-form-invalid-color: var(--danger);
+    --bs-form-invalid-border-color: var(--danger);
+
+    /* shape & type */
+    --bs-body-font-family: var(--font-sans);
+    --bs-border-radius: var(--r-md);
+    --bs-border-radius-sm: var(--r-sm);
+    --bs-border-radius-lg: var(--r-lg);
+    --bs-border-radius-xl: var(--r-xl);
+    --bs-border-radius-pill: var(--r-pill);
+}
+
+body.dark {
+    --bs-primary-rgb: 79, 182, 238;
+}
+
+/* Bootstrap paints these from static hexes rather than from its own variables,
+   so the bridge has to name them directly. */
+.modal-content,
+.offcanvas,
+.dropdown-menu,
+.card,
+.list-group-item {
+    background-color: var(--surface);
+    color: var(--text);
+    border-color: var(--border);
+}
+
+.modal-header,
+.modal-footer,
+.offcanvas-header {
+    border-color: var(--border);
+}
+
+.dropdown-item {
+    color: var(--text);
+}
+
+.dropdown-item:hover,
+.dropdown-item:focus {
+    background-color: var(--hover);
+    color: var(--ink);
+}
+
+.dropdown-item.active,
+.dropdown-item:active {
+    background-color: var(--accent);
+    color: var(--on-accent);
+}
+
+.form-control,
+.form-select {
+    background-color: var(--surface);
+    color: var(--text);
+    border-color: var(--border-strong);
+}
+
+.form-control:focus,
+.form-select:focus {
+    background-color: var(--surface);
+    color: var(--text);
+    border-color: var(--accent);
+    box-shadow: 0 0 0 3px var(--accent-ring);
+}
+
+/* Bootstrap's placeholder default is a light grey that fails AA on our
+   surfaces in both themes; --muted is verified against all three. */
+.form-control::placeholder,
+.form-select::placeholder,
+input::placeholder,
+textarea::placeholder {
+    color: var(--muted);
+    opacity: 1;
+}
+
+.form-control:disabled,
+.form-select:disabled {
+    background-color: var(--surface-2);
+    color: var(--muted);
+}
+
+.table {
+    --bs-table-bg: transparent;
+    --bs-table-color: var(--text);
+    --bs-table-border-color: var(--border);
+    --bs-table-striped-bg: var(--surface-2);
+    --bs-table-striped-color: var(--text);
+    --bs-table-hover-bg: var(--hover);
+    --bs-table-hover-color: var(--ink);
+}
+
+.btn-primary {
+    --bs-btn-bg: var(--accent);
+    --bs-btn-border-color: var(--accent);
+    --bs-btn-color: var(--on-accent);
+    --bs-btn-hover-bg: var(--accent-bright);
+    --bs-btn-hover-border-color: var(--accent-bright);
+    --bs-btn-hover-color: var(--on-accent);
+    --bs-btn-active-bg: var(--accent);
+    --bs-btn-active-border-color: var(--accent);
+    --bs-btn-active-color: var(--on-accent);
+    --bs-btn-disabled-bg: var(--accent);
+    --bs-btn-disabled-border-color: var(--accent);
+    --bs-btn-disabled-color: var(--on-accent);
+}
+
+.btn-outline-primary {
+    --bs-btn-color: var(--accent);
+    --bs-btn-border-color: var(--accent);
+    --bs-btn-hover-bg: var(--accent);
+    --bs-btn-hover-border-color: var(--accent);
+    --bs-btn-hover-color: var(--on-accent);
+    --bs-btn-active-bg: var(--accent);
+    --bs-btn-active-border-color: var(--accent);
+    --bs-btn-active-color: var(--on-accent);
+    --bs-btn-disabled-color: var(--accent);
+    --bs-btn-disabled-border-color: var(--accent);
+}
+
+/* Bootstrap compiles `.btn-*` colours from Sass at build time, so pointing
+   `--bs-success` at a token does not reach them — each variant has to be
+   named explicitly. */
+.btn-success {
+    --bs-btn-bg: var(--ok);
+    --bs-btn-border-color: var(--ok);
+    --bs-btn-color: var(--on-accent);
+    --bs-btn-hover-bg: color-mix(in srgb, var(--ok) 86%, var(--ink));
+    --bs-btn-hover-border-color: color-mix(in srgb, var(--ok) 86%, var(--ink));
+    --bs-btn-hover-color: var(--on-accent);
+    --bs-btn-active-bg: var(--ok);
+    --bs-btn-active-border-color: var(--ok);
+    --bs-btn-active-color: var(--on-accent);
+    --bs-btn-disabled-bg: var(--ok);
+    --bs-btn-disabled-border-color: var(--ok);
+    --bs-btn-disabled-color: var(--on-accent);
+}
+
+.btn-danger {
+    --bs-btn-bg: var(--danger);
+    --bs-btn-border-color: var(--danger);
+    --bs-btn-color: var(--on-accent);
+    --bs-btn-hover-bg: color-mix(in srgb, var(--danger) 86%, var(--ink));
+    --bs-btn-hover-border-color: color-mix(in srgb, var(--danger) 86%, var(--ink));
+    --bs-btn-hover-color: var(--on-accent);
+    --bs-btn-active-bg: var(--danger);
+    --bs-btn-active-border-color: var(--danger);
+    --bs-btn-active-color: var(--on-accent);
+    --bs-btn-disabled-bg: var(--danger);
+    --bs-btn-disabled-border-color: var(--danger);
+    --bs-btn-disabled-color: var(--on-accent);
+}
+
+.btn-warning {
+    --bs-btn-bg: var(--warn);
+    --bs-btn-border-color: var(--warn);
+    --bs-btn-color: var(--on-accent);
+    --bs-btn-hover-bg: color-mix(in srgb, var(--warn) 86%, var(--ink));
+    --bs-btn-hover-border-color: color-mix(in srgb, var(--warn) 86%, var(--ink));
+    --bs-btn-hover-color: var(--on-accent);
+    --bs-btn-active-bg: var(--warn);
+    --bs-btn-active-border-color: var(--warn);
+    --bs-btn-active-color: var(--on-accent);
+    --bs-btn-disabled-bg: var(--warn);
+    --bs-btn-disabled-border-color: var(--warn);
+    --bs-btn-disabled-color: var(--on-accent);
+}
+
+.btn-outline-secondary {
+    --bs-btn-color: var(--text);
+    --bs-btn-border-color: var(--border-strong);
+    --bs-btn-hover-bg: var(--hover);
+    --bs-btn-hover-border-color: var(--border-strong);
+    --bs-btn-hover-color: var(--ink);
+    --bs-btn-active-bg: var(--surface-3);
+    --bs-btn-active-border-color: var(--border-strong);
+    --bs-btn-active-color: var(--ink);
+}
+
+.btn-light {
+    --bs-btn-bg: var(--surface);
+    --bs-btn-border-color: var(--border-strong);
+    --bs-btn-color: var(--text);
+    --bs-btn-hover-bg: var(--hover);
+    --bs-btn-hover-border-color: var(--border-strong);
+    --bs-btn-hover-color: var(--ink);
+    --bs-btn-active-bg: var(--surface-2);
+    --bs-btn-active-border-color: var(--border-strong);
+    --bs-btn-active-color: var(--ink);
+    --bs-btn-disabled-bg: var(--surface-2);
+    --bs-btn-disabled-border-color: var(--border);
+    --bs-btn-disabled-color: var(--muted);
+}
+
+.btn-secondary {
+    --bs-btn-bg: var(--surface-3);
+    --bs-btn-border-color: var(--border-strong);
+    --bs-btn-color: var(--ink);
+    --bs-btn-hover-bg: var(--hover);
+    --bs-btn-hover-border-color: var(--border-strong);
+    --bs-btn-hover-color: var(--ink);
+    --bs-btn-active-bg: var(--surface-3);
+    --bs-btn-active-border-color: var(--border-strong);
+    --bs-btn-active-color: var(--ink);
+}
+
+/* Toast: the header was the one surface that needed a hand-written dark rule. */
+.toast {
+    background-color: var(--surface);
+    color: var(--text);
+    border-color: var(--border);
+}
+
+.toast-header {
+    background-color: var(--surface-2);
+    color: var(--ink);
+    border-bottom-color: var(--border);
+}
+
+body.dark .btn-close {
+    filter: invert(1) grayscale(1) brightness(1.6);
+}
+
+.nav-tabs {
+    --bs-nav-tabs-border-color: var(--border);
+    --bs-nav-tabs-link-active-bg: var(--surface);
+    --bs-nav-tabs-link-active-color: var(--ink);
+    --bs-nav-tabs-link-active-border-color: var(--border) var(--border) var(--surface);
+    --bs-nav-link-color: var(--muted);
+    --bs-nav-link-hover-color: var(--accent);
+}
+
+.spinner-border,
+.spinner-grow {
+    color: var(--accent);
+}
+
+/* Pagination, badges, checkboxes, progress and list-group active are the other
+   Bootstrap surfaces whose colours are compiled rather than variable-driven.
+   Without these the panel leaks Bootstrap's own #0d6efd blue. */
+.pagination {
+    --bs-pagination-color: var(--text);
+    --bs-pagination-bg: var(--surface);
+    --bs-pagination-border-color: var(--border);
+    --bs-pagination-hover-color: var(--ink);
+    --bs-pagination-hover-bg: var(--hover);
+    --bs-pagination-hover-border-color: var(--border-strong);
+    --bs-pagination-focus-color: var(--ink);
+    --bs-pagination-focus-bg: var(--hover);
+    --bs-pagination-focus-box-shadow: 0 0 0 3px var(--accent-ring);
+    --bs-pagination-active-color: var(--on-accent);
+    --bs-pagination-active-bg: var(--accent);
+    --bs-pagination-active-border-color: var(--accent);
+    --bs-pagination-disabled-color: var(--muted);
+    --bs-pagination-disabled-bg: var(--surface-2);
+    --bs-pagination-disabled-border-color: var(--border);
+}
+
+.badge.bg-primary   { background-color: var(--accent) !important; color: var(--on-accent); }
+.badge.bg-success   { background-color: var(--ok) !important; color: var(--on-accent); }
+.badge.bg-danger    { background-color: var(--danger) !important; color: var(--on-accent); }
+.badge.bg-warning   { background-color: var(--warn) !important; color: var(--on-accent); }
+.badge.bg-secondary { background-color: var(--surface-3) !important; color: var(--ink); }
+
+.form-check-input {
+    background-color: var(--surface);
+    border-color: var(--border-strong);
+}
+
+.form-check-input:checked {
+    background-color: var(--accent);
+    border-color: var(--accent);
+}
+
+.form-check-input:focus {
+    border-color: var(--accent);
+    box-shadow: 0 0 0 3px var(--accent-ring);
+}
+
+.progress {
+    --bs-progress-bg: var(--surface-3);
+    --bs-progress-bar-bg: var(--accent);
+}
+
+.list-group-item.active {
+    background-color: var(--accent);
+    border-color: var(--accent);
+    color: var(--on-accent);
+}
+
+.nav-pills {
+    --bs-nav-pills-link-active-bg: var(--accent);
+    --bs-nav-pills-link-active-color: var(--on-accent);
+}
+
+.input-group-text {
+    background-color: var(--surface-2);
+    border-color: var(--border-strong);
+    color: var(--text);
+}
+
+.alert-success { --bs-alert-bg: var(--ok-soft);     --bs-alert-color: var(--ok);     --bs-alert-border-color: var(--ok); }
+.alert-danger  { --bs-alert-bg: var(--danger-soft); --bs-alert-color: var(--danger); --bs-alert-border-color: var(--danger); }
+.alert-warning { --bs-alert-bg: var(--warn-soft);   --bs-alert-color: var(--warn);   --bs-alert-border-color: var(--warn); }
+.alert-info    { --bs-alert-bg: var(--accent-soft); --bs-alert-color: var(--accent); --bs-alert-border-color: var(--accent); }

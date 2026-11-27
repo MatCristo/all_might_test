@@ -1,0 +1,41 @@
+.dataContainer {
+    border: 1px solid var(--border);
+    border-radius: var(--r-md);
+    overflow-x: auto;
+    box-shadow: var(--shadow-md);
+    width: 100%;
+    display: block;
+}
+
+.dataTable table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: var(--fs-sm);
+    table-layout: fixed;
+}
+
+.dataTable th {
+    background-color: var(--surface-3);
+    padding: 12px 15px;
+    text-align: center;
+    font-weight: 600;
+    color: var(--ink);
+    border-bottom: 2px solid var(--border);
+}
+
+.dataTable td {
+    padding: 12px 15px;
+    border-bottom: 1px solid var(--border);
+    color: var(--text);
+    vertical-align: middle;
+    text-align: center;
+    /* Keep columns at their fixed width: clip long values with an ellipsis
+       instead of letting the cell grow. */
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.dataTable tr:hover {
+    background-color: var(--hover);
+}
