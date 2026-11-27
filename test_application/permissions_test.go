@@ -189,4 +189,16 @@ func runPageReachTests(t *testing.T, e *echo.Echo) {
 		rec := request(t, e, http.MethodGet, path, email, nil)
 		assert.Equalf(t, http.StatusOK, rec.Code, "%s answered %d to a user holding Integração", path, rec.Code)
 	}
+
+	// Each page opens only its own routes.
+	rec := request(t, e, http.MethodGet, "/api/status/applications", email, nil)
+	assert.Equal(t, http.StatusForbidden, rec.Code, "Integração alone must not open Status das aplicações")
+
+	statusEmail := userWithPages(t, authz.PageStatus)
+
+	rec = request(t, e, http.MethodGet, "/api/status/applications", statusEmail, nil)
+	assert.Equal(t, http.StatusOK, rec.Code, "a user holding Status das aplicações reaches its route")
+
+	rec = request(t, e, http.MethodGet, "/api/report/logs?page=0", statusEmail, nil)
+	assert.Equal(t, http.StatusForbidden, rec.Code, "Status das aplicações alone must not open Integração")
 }

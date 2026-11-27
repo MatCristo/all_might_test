@@ -1,6 +1,7 @@
 package routes
 
 import (
+	"github.com/DaviTelelaudo/all-might/internal/domain/appstatus"
 	"github.com/DaviTelelaudo/all-might/internal/domain/company"
 	"github.com/DaviTelelaudo/all-might/internal/domain/health"
 	"github.com/DaviTelelaudo/all-might/internal/domain/permission"
@@ -41,6 +42,9 @@ func Init(e *echo.Echo) error {
 
 	// The company name list is the Integração empresa filter.
 	protected.GET("/api/company/clinux", company.GetAllCompanies, middleware.RequirePermission(authz.PageIntegracao))
+
+	// Status das aplicações: is any background application in trouble now?
+	protected.GET("/api/status/applications", appstatus.GetApplicationsStatus, middleware.RequirePermission(authz.PageStatus))
 
 	return nil
 }

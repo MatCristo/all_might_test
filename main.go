@@ -4,6 +4,7 @@ import (
 	"log"
 	"net/http"
 
+	"github.com/DaviTelelaudo/all-might/internal/domain/appstatus"
 	"github.com/DaviTelelaudo/all-might/internal/platform/auth"
 	"github.com/DaviTelelaudo/all-might/internal/platform/aws"
 	"github.com/DaviTelelaudo/all-might/internal/platform/config"
@@ -49,6 +50,9 @@ func main() {
 	if err != nil {
 		log.Fatalf("Error starting routes: %v", err)
 	}
+
+	// Reads the applications' metric in the background, every 5 minutes.
+	appstatus.StartRefresher()
 
 	go aws.RegisterLog("ApplicationStarted", "Application started successfully")
 

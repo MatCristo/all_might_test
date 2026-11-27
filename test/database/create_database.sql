@@ -50,9 +50,10 @@ INSERT INTO public.users (id, name, email, password, id_role) VALUES
     ('11111111-1111-4111-8111-000000000002'::uuid, 'teste support', 'teste.support@telelaudo.com.br', '$2a$14$zrk78blc/rPrG4/fn4S3z.bM7BPJJLsGr56WHvASaiO5.a4Ewd9gu', 'a1b2c3d4-e5f6-7890-abcd-ef1234567890'::uuid);
 
 INSERT INTO public.permissions (name, label, description, sort_order) VALUES
-    ('page:integracao', 'Integração', 'Logs de entrega e reenvio de laudos', 1);
+    ('page:integracao', 'Integração', 'Logs de entrega e reenvio de laudos', 1),
+    ('page:status', 'Status das aplicações', 'Execução no prazo das aplicações de background', 2);
 
--- Every seeded user holds Integração.
+-- Every seeded user holds every page.
 INSERT INTO public.user_permissions (id_user, id_permission)
 SELECT users.id, permissions.id FROM users, permissions;
 

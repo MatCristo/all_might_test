@@ -7,6 +7,7 @@ import (
 	"net/http"
 
 	"github.com/aws/aws-sdk-go-v2/config"
+	"github.com/aws/aws-sdk-go-v2/service/cloudwatch"
 	"github.com/aws/aws-sdk-go-v2/service/cloudwatchlogs"
 	"github.com/aws/aws-sdk-go-v2/service/secretsmanager"
 )
@@ -38,6 +39,10 @@ func Init() error {
 	})
 
 	awsService.cloudwatchLogsClient = cloudwatchlogs.NewFromConfig(cfg, func(o *cloudwatchlogs.Options) {
+		o.BaseEndpoint = &endpoint
+	})
+
+	awsService.cloudwatchClient = cloudwatch.NewFromConfig(cfg, func(o *cloudwatch.Options) {
 		o.BaseEndpoint = &endpoint
 	})
 

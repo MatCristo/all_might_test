@@ -26,6 +26,7 @@ import (
 // readable in one file.
 const (
 	PageIntegracao = "page:integracao"
+	PageStatus     = "page:status"
 )
 
 // The key the actor is stored under. Echo's context is a string map, so the
