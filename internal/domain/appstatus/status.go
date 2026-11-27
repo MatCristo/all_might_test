@@ -97,6 +97,10 @@ func BuildApplicationStatus(name string, points []aws.MetricPoint, windowStart, 
 	// just the newest period still on its way, and the last state stands.
 	if app.LastDataAt == nil || now.Sub(*app.LastDataAt) > StaleAfter {
 		app.Segments = appendSegment(app.Segments, models.StatusNoData, cursor, now)
+	} else {
+		// The last state holds until now, so it reads as still going on (a
+		// failure is not shown as over just because the newest point is late).
+		app.Segments[len(app.Segments)-1].End = now
 	}
 
 	current := app.Segments[len(app.Segments)-1]

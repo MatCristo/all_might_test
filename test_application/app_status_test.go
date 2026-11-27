@@ -111,6 +111,25 @@ func TestApplicationStatusLogic(t *testing.T) {
 		assert.Equal(t, models.StatusOK, app.Status)
 	})
 
+	t.Run("FailureWithLateNewestPointIsStillOngoing", func(t *testing.T) {
+		// Failing for 3 hours, and the two newest periods have not arrived yet.
+		app := appstatus.BuildApplicationStatus("a", week(func(n int) *float64 {
+			if n <= 2 {
+				return nil
+			}
+			if n <= 36 {
+				return &zero
+			}
+			return &one
+		}), statusWindowStart, statusNow)
+
+		last := app.Segments[len(app.Segments)-1]
+
+		assert.Equal(t, models.StatusFailing, app.Status)
+		assert.Equal(t, periodsAgo(36), app.Since)
+		assert.Equal(t, statusNow, last.End, "the failure runs up to now, not to the last point")
+	})
+
 	t.Run("OldGapIsASegmentButNotTheCurrentState", func(t *testing.T) {
 		app := appstatus.BuildApplicationStatus("a", week(func(n int) *float64 {
 			if n <= 1200 && n > 1128 {
